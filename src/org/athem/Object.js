@@ -2,13 +2,6 @@
  *
  */
 
-//if (typeof jQuery === 'undefined') {
-//	throw Error('Could not find jQuery library. Please include jQuery to project.');
-//}
-//if (typeof $ === 'undefined') {
-//	throw Error('Could not find Prototype Js library. Please include Prototype Js to project.');
-//}
-
 (function(j){
 
 	window.org = window.org || {};
@@ -43,6 +36,87 @@
 	 * @copyright  Copyright (c) 2011 IT Media Connect, Romania (http://www.itmediaconnect.ro)
 	 * @license http://itmediaconnect.ro/products/jajax/licence
 	 */
+
+	/**
+	 * @TODO: Add documentation
+	 * @type {*|Function}
+	 */
+	Array.isArray = Array.isArray || function (vArg) {
+		return Object.prototype.toString.call(vArg) === "[object Array]";
+	};
+
+	/**
+	 * @TODO: Add documentation
+	 * @type {*|Function}
+	 */
+	Array.prototype.indexOf = Array.prototype.indexOf || function (searchElement /*, fromIndex */ ) {
+		"use strict";
+		if (this == null) {
+			throw new TypeError();
+		}
+		var t = Object(this);
+		var len = t.length >>> 0;
+		if (len === 0) {
+			return -1;
+		}
+		var n = 0;
+		if (arguments.length > 1) {
+			n = Number(arguments[1]);
+			if (n != n) { // shortcut for verifying if it's NaN
+				n = 0;
+			} else if (n != 0 && n != Infinity && n != -Infinity) {
+				n = (n > 0 || -1) * Math.floor(Math.abs(n));
+			}
+		}
+		if (n >= len) {
+			return -1;
+		}
+		var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+		for (; k < len; k++) {
+			if (k in t && t[k] === searchElement) {
+				return k;
+			}
+		}
+		return -1;
+	};
+
+	/**
+	 * @TODO: Add documentation
+	 * @type {*|Function}
+	 */
+	Array.prototype.lastIndexOf = Array.prototype.lastIndexOf || function(searchElement /*, fromIndex*/)
+	{
+		"use strict";
+
+		if (this == null)
+			throw new TypeError();
+
+		var t = Object(this);
+		var len = t.length >>> 0;
+		if (len === 0)
+			return -1;
+
+		var n = len;
+		if (arguments.length > 1)
+		{
+			n = Number(arguments[1]);
+			if (n != n)
+				n = 0;
+			else if (n != 0 && n != (1 / 0) && n != -(1 / 0))
+				n = (n > 0 || -1) * Math.floor(Math.abs(n));
+		}
+
+		var k = n >= 0
+			? Math.min(n, len - 1)
+			: len - Math.abs(n);
+
+		for (; k >= 0; k--)
+		{
+			if (k in t && t[k] === searchElement)
+				return k;
+		}
+		return -1;
+	};
 
 	/**
 	 * Executes a provided function once for each array element.
@@ -357,7 +431,7 @@
 	 * @param String value
 	 * @return String
 	 */
-	String.prototype.fromBase64 = function(){
+	String.prototype.fromBase64 = String.prototype.fromBase64 || function(){
 		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 		var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, dec = "", tmp_arr = [];
 		var string = this.valueOf();
@@ -396,7 +470,7 @@
 	 * Converts from Camel Case to different forms
 	 * @return String
 	 */
-	String.prototype.fromCamelCase = function (to){
+	String.prototype.fromCamelCase = String.prototype.fromCamelCase || String.prototype.fromCamelCase || function (to){
 		to = to ? to : '_';
 		return this.replace(/([A-Z])/g, (function(to){ return function($1){return to+$1.toLowerCase();} })(to));
 	}
@@ -408,7 +482,7 @@
 	 * @param String value
 	 * @return String
 	 */
-	String.prototype.fromUTF8 = function(value){
+	String.prototype.fromUTF8 = String.prototype.fromUTF8 || function(value){
 		var string = this.valueOf();
 		var tmp_arr = [], i = 0, ac = 0, c1 = 0, c2 = 0, c3 = 0;
 		string += '';
@@ -446,7 +520,7 @@
 	 * @param String value
 	 * @return String
 	 */
-	String.prototype.htmlEncode = function(value){
+	String.prototype.htmlEncode = String.prototype.htmlEncode || function(value){
 		return escape(value || this);
 	};
 
@@ -462,7 +536,7 @@
 	 * @param String value
 	 * @return String
 	 */
-	String.prototype.htmlDecode = function(value){
+	String.prototype.htmlDecode = String.prototype.htmlDecode || function(value){
 		return unescape(value || this);
 	};
 
@@ -473,7 +547,7 @@
 	 * @param String value
 	 * @return Boolean
 	 */
-	String.prototype.isFloat = function(value){
+	String.prototype.isFloat = String.prototype.isFloat || function(value){
 		//	n = parseFloat(value || this);
 		//	return ((!isNaN(n) && n.toString() == this) ? true : false);
 		return (this.match(/^-?\d+(\.\d*)?([eE][-+]\d+)?$/) ? true : false);
@@ -486,7 +560,7 @@
 	 * @param String value
 	 * @return Boolean
 	 */
-	String.prototype.isInt = function(value){
+	String.prototype.isInt = String.prototype.isInt || function(value){
 		var n = parseInt(value || this);
 		return ((!isNaN(n) && n.toString() == this) ? true : false);
 		//	return (this.match(/^-?(\d|[1-9]\d+)([eE]+\d+)?$/) ? true: false);
@@ -499,7 +573,7 @@
 	 * @param String value
 	 * @return Boolean
 	 */
-	String.prototype.isNumber = function(value){
+	String.prototype.isNumber = String.prototype.isNumber || function(value){
 		return (this.isInt(value) || this.isFloat(value));
 	};
 
@@ -508,7 +582,7 @@
 	 * @see http://php.net/manual/en/function.ucfirst.php
 	 * @return String
 	 */
-	String.prototype.lcfirst = function () {
+	String.prototype.lcfirst = String.prototype.lcfirst || function () {
 		return (this.length > 1) ?
 			this.replace(/^([A-Z])/g, function($1){return $1.toLowerCase();}) :
 			((this.length == 1) ? this.toLowerCase() : this);
@@ -528,7 +602,7 @@
 	 * @param RegExp|String pattern
 	 * @return Boolean|Array
 	 */
-	String.prototype.matchAll = function(pattern){
+	String.prototype.matchAll = String.prototype.matchAll || function(pattern){
 		var s = pattern.toString();
 		if (s.indexOf("/") != 0)
 			throw "String.mathAll(pattern): pattern is not RegExp";
@@ -555,7 +629,7 @@
 	 * @param String value
 	 * @return String
 	 */
-	String.prototype.replaceAll = function(pattern, value) {
+	String.prototype.replaceAll = String.prototype.replaceAll || function(pattern, value) {
 		var s = pattern.toString();
 		if (s.indexOf("/") != 0)
 			throw "String.replaceAll(pattern, value): " + s + " is not RegExp";
@@ -574,18 +648,18 @@
 	 * Trim function.
 	 * @return String
 	 */
-	String.prototype.trim = function(c) { return this.trimLeft(c).trimRight(c); }
+	String.prototype.trim = String.prototype.trim || function(c) { return this.trimLeft(c).trimRight(c); }
 	/**
 	 * Trim Left function.
 	 * @return String
 	 */
-	String.prototype.trimLeft = function(c) { c = c || '\s'; var r = new RegExp('^[' + c + ']+','g'); return this.replace(r, ''); }
+	String.prototype.trimLeft = String.prototype.trimLeft || function(c) { c = c || '\s'; var r = new RegExp('^[' + c + ']+','g'); return this.replace(r, ''); }
 
 	/**
 	 * Trim Right function.
 	 * @return String
 	 */
-	String.prototype.trimRight = function(c) { c = c || '\s'; var r = new RegExp('[' + c + ']+$','g'); return this.replace(r, ''); }
+	String.prototype.trimRight = String.prototype.trimRight || function(c) { c = c || '\s'; var r = new RegExp('[' + c + ']+$','g'); return this.replace(r, ''); }
 
 	/**
 	 * Encodes a string to BASE64
@@ -594,7 +668,7 @@
 	 * @param String value
 	 * @return String
 	 */
-	String.prototype.toBase64 = function(){
+	String.prototype.toBase64 = String.prototype.toBase64 || function(){
 		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 		var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, enc = "", tmp_arr = [];
 		var string = this.valueOf();
@@ -634,18 +708,18 @@
 	 * @memberOf Number
 	 * @return Number
 	 */
-	String.prototype.toCamel = function() { return this.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');}); };
+	String.prototype.toCamel = String.prototype.toCamel || function() { return this.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');}); };
 
 	/**
 	 * From CamelCase to Dashed
 	 */
-	String.prototype.toDash = function() { return this.replace(/([A-Z])/g, function($1){return "-"+$1.toLowerCase();}); };
+	String.prototype.toDash = String.prototype.toDash || function() { return this.replace(/([A-Z])/g, function($1){return "-"+$1.toLowerCase();}); };
 
 	/**
 	 * Converts string to Camel Case from different forms
 	 * @return String
 	 */
-	String.prototype.toCamelCase = function (from) {
+	String.prototype.toCamelCase = String.prototype.toCamelCase || function (from) {
 		from = from ? from : '_';
 		var r = new RegExp(from + '([a-z])', 'g');
 		return this.replace(r, function($1){ return $1.toUpperCase().replace(from, ''); });
@@ -658,7 +732,7 @@
 	 * @param String value
 	 * @return HTMLElement
 	 */
-	String.prototype.toElement = function(){
+	String.prototype.toElement = String.prototype.toElement || function(){
 		var div = document.createElement('div');
 		div.innerHTML = this.valueOf();
 		var el = div.firstChild;
@@ -669,7 +743,7 @@
 	 * Converts a JSON string to an Object
 	 * @return Object
 	 */
-	String.prototype.fromJSON = function() {
+	String.prototype.fromJSON = String.prototype.fromJSON || function() {
 		if (window.JSON && window.JSON.parse && typeof window.JSON.parse === 'function') {
 			return window.JSON.parse(this.valueOf());
 		}
@@ -684,7 +758,7 @@
 	 * @param Number value
 	 * @return Number
 	 */
-	String.prototype.toNumberfromBase = function(base){
+	String.prototype.toNumberfromBase = String.prototype.toNumberfromBase || function(base){
 		/** @TODO Must try & check string before converting */
 		return parseInt(this.valueOf(), base);
 	};
@@ -696,7 +770,7 @@
 	 * @param Number value
 	 * @return Number
 	 */
-	String.prototype.toNumberFromBinary = function(){
+	String.prototype.toNumberFromBinary = String.prototype.toNumberFromBinary || function(){
 		if (!/^[01]+$/.test(this.valueOf())) {
 			throw Error('Cannot convert ' + this.valueOf() + ' from binary to number. Invalid binary value.');
 		}
@@ -710,7 +784,7 @@
 	 * @param String value
 	 * @return Number
 	 */
-	String.prototype.toNumberfromHexa = function(){
+	String.prototype.toNumberfromHexa = String.prototype.toNumberfromHexa || function(){
 		if (!/^[0-9A-F]+$/.test(this.valueOf().toUpperCase())) {
 			throw Error('Cannot convert ' + this.valueOf() + ' from hexa to number. Invalid hexa value.');
 		}
@@ -724,7 +798,7 @@
 	 * @param String value
 	 * @return Number
 	 */
-	String.prototype.toNumberFromOctal = function(){
+	String.prototype.toNumberFromOctal = String.prototype.toNumberFromOctal || function(){
 		if (!/^[0-7]+$/.test(this.valueOf())) {
 			throw Error('Cannot convert ' + this.valueOf() + ' from octal to number. Invalid octal value.');
 		}
@@ -734,7 +808,7 @@
 	/**
 	 * From CamelCase to Underscore
 	 */
-	String.prototype.toUnderscore = function() { return this.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();}); };
+	String.prototype.toUnderscore = String.prototype.toUnderscore || function() { return this.replace(/([A-Z])/g, function($1){return "_"+$1.toLowerCase();}); };
 
 	/**
 	 * Encodes a string to UTF8
@@ -743,7 +817,7 @@
 	 * @param String value
 	 * @return String
 	 */
-	String.prototype.toUTF8 = function(){
+	String.prototype.toUTF8 = String.prototype.toUTF8 || function(){
 		var string = this.valueOf();
 		string = (string + '').replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 		var utftext = "";
@@ -781,7 +855,7 @@
 	 * Converts an XML string to Object
 	 *
 	 */
-	String.prototype.fromXML = function(ns) {
+	String.prototype.fromXML = String.prototype.fromXML || function(ns) {
 		var tag = null, value = null, i, node;
 		if (window.DOMParser) {
 			node = (new DOMParser()).parseFromString(this.valueOf(), "text/xml");
@@ -798,7 +872,7 @@
 	 * @see http://php.net/manual/en/function.ucfirst.php
 	 * @return String
 	 */
-	String.prototype.ucfirst = function() {
+	String.prototype.ucfirst = String.prototype.ucfirst || function() {
 		return (this.length > 1) ?
 			this.replace(/^([a-z])/g, function($1){return $1.toUpperCase();}) :
 			((this.length == 1) ? this.toUpperCase() : this);
@@ -1039,7 +1113,6 @@
 					result = Object.xmlTagFromObject(object, ns, p) + a.join('') + Object.xmlTagFromObject(object, ns, p, true);
 					break;
 				case Object.TYPE_UNSERIALIZABLE_CLASS :
-					console.log(object)
 					throw new TypeError('Converting circular structure to XML');
 					break;
 				default:
