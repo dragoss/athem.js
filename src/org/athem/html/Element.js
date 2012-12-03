@@ -73,11 +73,23 @@
 				html = o.html;
 				delete o['html'];
 			}
-			for (i in o) {
+			for (var i in o) {
 				$elem.attr(i, o[i]);
 			}
 			if (html) {
-				$elem.append((Object.getType(html) === 'string') ? html : this._render(html));
+				//$elem.append((Object.getType(html) === 'string') ? html : this._render(html));
+
+                if (Object.getObjectType(html) === Object.TYPE_STRING) {
+                    $elem.append(html);
+                } else if (Object.getObjectType(html) === Object.TYPE_OBJECT_CLASS) {
+                    $elem.append(this._render(html));
+                } else if (Object.getObjectType(html) === Object.TYPE_ARRAY_CLASS) {
+                    for (var i in html) {
+                        $elem.append(this._render(html[i]));
+                    }
+                } else {
+                    // @TODO: Add error msg in case of wrong format
+                }
 			}
 			return $elem;
 		},
